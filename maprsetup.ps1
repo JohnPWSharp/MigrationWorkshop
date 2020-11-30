@@ -34,7 +34,7 @@ $nsgName = 'maprnsg'
 $targetOS = 'Linux'
 $osDiskName = 'maprosdisk'
 $dataDiskName = 'maprdatadisk'
-$osVhdSizeBytes = 68719477248
+$osVhdSizeBytes = 137438953984
 $dataVhdSizeBytes = 137438953984
 
 # Create a resource group for holding the virtual machine
@@ -222,6 +222,12 @@ $osDisk = Get-AzDisk `
     -ResourceGroupName $resourceGroupName `
     -DiskName $osDiskName
 
+$VirtualMachine = Set-AzVMOSDisk `
+    -VM $VirtualMachine `
+    -ManagedDiskId $osDisk.Id `
+    -CreateOption Attach -Linux
+
+
 $dataDisk = Get-AzDisk `
     -ResourceGroupName $resourceGroupName `
     -DiskName $dataDiskName
@@ -231,12 +237,7 @@ $VirtualMachine = Add-AzVMDataDisk `
     -ManagedDiskId $dataDisk.Id `
     -CreateOption Attach `
     -Lun 0
-    
-$VirtualMachine = Set-AzVMOSDisk `
-    -VM $VirtualMachine `
-    -ManagedDiskId $osDisk.Id `
-    -CreateOption Attach -Linux
-    
+
 # Create a public IP for the VM
 $publicIp = New-AzPublicIpAddress `
     -Name ($VirtualMachineName.ToLower() + '_ip') `
