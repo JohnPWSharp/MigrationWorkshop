@@ -58,7 +58,7 @@ $targetOSDiskSas = Grant-AzDiskAccess -ResourceGroupName $resourceGroupName `
     -DurationInSecond 864000 -Access 'Write'
 
 # Copy the contents of the pre-created OS disk to the managed OS disk
-azcopy copy $sourceOSDiskSAS $targetOSDiskSas.AccessSAS `
+.\azcopy copy $sourceOSDiskSAS $targetOSDiskSas.AccessSAS `
     --blob-type PageBlob
 
 Revoke-AzDiskAccess -ResourceGroupName $resourceGroupName `
@@ -80,7 +80,7 @@ $targetDataDiskSas = Grant-AzDiskAccess -ResourceGroupName $resourceGroupName `
     -DiskName $dataDiskName `
     -DurationInSecond 864000 -Access 'Write'
 
-azcopy copy $sourceDataDiskSAS $targetDataDiskSas.AccessSAS `
+.\azcopy copy $sourceDataDiskSAS $targetDataDiskSas.AccessSAS `
     --blob-type PageBlob
 
 Revoke-AzDiskAccess -ResourceGroupName $resourceGroupName `
@@ -193,6 +193,26 @@ $nsg | Add-AzNetworkSecurityRuleConfig `
     -SourcePortRange * `
     -DestinationAddressPrefix * `
     -DestinationPortRange 9092 | Set-AzNetworkSecurityGroup
+
+$nsg | Add-AzNetworkSecurityRuleConfig `
+    -Name 'HBase2' `
+    -Access Allow `
+    -Protocol Tcp `
+    -Direction Inbound -Priority 430 `
+    -SourceAddressPrefix Internet `
+    -SourcePortRange * `
+    -DestinationAddressPrefix * `
+    -DestinationPortRange 16000 | Set-AzNetworkSecurityGroup
+
+$nsg | Add-AzNetworkSecurityRuleConfig `
+    -Name 'HBase3' `
+    -Access Allow `
+    -Protocol Tcp `
+    -Direction Inbound -Priority 440 `
+    -SourceAddressPrefix Internet `
+    -SourcePortRange * `
+    -DestinationAddressPrefix * `
+    -DestinationPortRange 16020 | Set-AzNetworkSecurityGroup
 
 # Create a subnet for the VM, and associate the NSG with the subnet
 $subnetConfig = Add-AzVirtualNetworkSubnetConfig `
