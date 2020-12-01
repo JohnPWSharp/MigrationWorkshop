@@ -24,7 +24,7 @@ $virtualNetworkName = 'maprvmvnet'
 $subnetName = 'maprsubnet'
 
 #VNet prefix for the VM
-$vnetprefix = '10.1.0.0'
+$vnetprefix = '10.20.0.0'
 
 #Network security group name for the VNet
 $nsgName = 'maprnsg'
