@@ -23,9 +23,6 @@ $virtualMachineSize = 'Standard_E8-4s_v4'
 $virtualNetworkName = 'maprvmvnet'
 $subnetName = 'maprsubnet'
 
-#VNet prefix for the VM
-$vnetprefix = '10.20.0.0'
-
 #Network security group name for the VNet
 $nsgName = 'maprnsg'
 
@@ -36,6 +33,9 @@ $osDiskName = 'maprosdisk'
 $dataDiskName = 'maprdatadisk'
 $osVhdSizeBytes = 137438953984
 $dataVhdSizeBytes = 137438953984
+
+#VNet prefix for the VM
+$vnetprefix = '10.20.0.0'
 
 # Create a resource group for holding the virtual machine
 Select-AzSubscription -SubscriptionId $SubscriptionId
